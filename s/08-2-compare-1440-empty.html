@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th"><meta charset="utf-8"/><title>พลังงาน (เปรียบเทียบ) (ไม่มีข้อมูล) – VALIS ต้นแบบหน้าจอ</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#662F90;--p-h:#55267A;--p-soft:#EFE6F8;--ink:#2A1F38;--ink2:#3D3150;--mut:#5E5270;--line:#E3DDEA;--line2:#8A7D9C;--bg:#F7F5FA;--w:#fff;
+--warn:#8A4B00;--warn-bg:#FFF4E0;--dan:#B42318;--dan-bg:#FEECEB;--ok:#1E6B3A;--ok-bg:#E6F4EA;--inf:#1D4F91;--inf-bg:#E8F0FB;--dis-bg:#ECE8F0;--dis:#6E6380}
+body{font-family:'Noto Sans Thai','Noto Sans',sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.6}
+.screen{position:relative;overflow:hidden;background:var(--bg)}
+.top{height:56px;background:var(--w);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px 0 20px;gap:12px;position:relative;z-index:5}
+.wm{font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--p);line-height:1}
+.ph{font-size:12px;color:var(--mut);border:1px dashed var(--line2);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.hosp{font-size:14px;color:var(--ink2);padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.sp{flex:1}
+.date{font-size:13px;color:var(--mut);white-space:nowrap}
+.ib{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.badge{position:absolute;top:6px;right:5px;min-width:18px;height:18px;border-radius:9px;background:var(--dan);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;padding:0 4px}
+.user{display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 4px;border-radius:8px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:var(--p);display:flex;align-items:center;justify-content:center}
+.un{font-size:13px;font-weight:600;line-height:1.3}.ur{font-size:12px;color:var(--mut);line-height:1.3}
+.lv{font-size:12px;font-weight:700;color:var(--p);background:var(--p-soft);border-radius:4px;padding:0 5px;margin-right:4px}
+.body{display:flex;min-height:calc(100% - 56px)}
+.side{width:288px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:12px}
+.it svg,.ri svg,.btn svg{flex-shrink:0}
+.gh{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--mut);padding:10px 12px 4px;height:32px}
+.gh.tg{height:44px;padding:0 12px;border-radius:8px}
+.it{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:8px;color:var(--ink2);font-size:14px;white-space:nowrap;position:relative}
+.it .ch{margin-left:auto;color:var(--mut);display:flex}
+.it.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.it.hv{background:var(--bg);color:var(--ink)}
+.it.fc{outline:2px solid var(--p);outline-offset:2px}
+.sub{padding-left:44px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--mut);border-radius:8px}
+.sub.on{color:var(--p);font-weight:700;background:var(--p-soft)}
+.cnt{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--dan);border-radius:9px;padding:0 7px;line-height:18px}
+.rail{width:72px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:8px 14px;display:flex;flex-direction:column;align-items:center}
+.ri{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.ri.on{background:var(--p-soft);color:var(--p)}
+.ri.hv{background:var(--bg)}
+.rdiv{width:32px;height:1px;background:var(--line);margin:6px 0;flex:none}
+.tip{position:absolute;left:56px;top:6px;background:var(--ink);color:#fff;font-size:13px;padding:4px 10px;border-radius:6px;white-space:nowrap;z-index:9;line-height:1.6}
+.tip small{display:block;color:#E9DDF7;font-size:12px}
+.main{flex:1;min-width:0;padding:24px 32px 32px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:4px}.crumb b{color:var(--ink2);font-weight:600}
+.hdr{display:flex;align-items:flex-end;gap:16px;margin-bottom:16px}
+h1{font-size:24px;line-height:1.4;font-weight:700}
+.lead{font-size:14px;color:var(--mut)}
+.acts{margin-left:auto;display:flex;gap:8px;flex:none}
+.btn{height:44px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:inherit;border:1px solid transparent;flex:none}
+.btn.pr{background:var(--p);color:#fff;border-color:var(--p)} .btn.pr.hv{background:var(--p-h);border-color:var(--p-h)}
+.btn.o{border-color:var(--line2);background:var(--w);color:var(--ink2)}
+.btn.gh2{background:transparent;color:var(--p)}
+.btn.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.btn.fc{outline:2px solid var(--p);outline-offset:2px}
+.btn.dan{background:var(--w);color:var(--dan);border-color:var(--dan)}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff}
+.spin.d{border-color:#CFC6DA;border-top-color:var(--p)}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);background:var(--w);border:1px solid #D9CCE8;border-radius:6px;padding:6px 12px;margin-bottom:16px}
+.note.w{background:var(--warn-bg);border-color:#F0D9B5}
+.note.e{background:var(--dan-bg);border-color:#F5C9C5}
+.tag{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;white-space:nowrap;line-height:20px;display:inline-block}
+.t-s{color:var(--warn);background:var(--warn-bg)} .t-sim{color:var(--mut);background:#EEEAF2} .t-est{color:var(--p);background:var(--p-soft)} .t-pil{color:var(--inf);background:var(--inf-bg)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);background:var(--w);border:1px solid var(--line);border-radius:8px;margin-bottom:16px}
+.k{padding:12px 20px;border-left:1px solid var(--line)} .k:first-child{border-left:0}
+.kl{font-size:13px;color:var(--mut)} .kv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+.kv small{font-size:13px;font-weight:500;color:var(--mut);margin-left:4px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pan{background:var(--w);border:1px solid var(--line);border-radius:8px;padding:16px 20px;min-width:0}
+.pt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pt h2{font-size:16px;font-weight:700;margin-right:4px}
+.pt .r{margin-left:auto}
+.fig{display:flex;gap:28px;margin:4px 0 8px;flex-wrap:wrap}
+.fl{font-size:13px;color:var(--mut)} .fv{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.4}
+.fv.d{color:var(--ok)}
+.def{font-size:12px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px;margin-top:4px;display:flex;gap:16px;align-items:center}
+.lnk{display:inline-flex;align-items:center;min-height:44px;color:var(--p);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;font-size:14px}
+.def .lnk{margin-left:auto}
+.lg{display:flex;gap:16px;font-size:12px;color:var(--ink2);flex-wrap:wrap}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row .n{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.st{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;line-height:20px;white-space:nowrap}
+.s-d{color:var(--dan);background:var(--dan-bg)} .s-w{color:var(--warn);background:var(--warn-bg)} .s-o{color:var(--ok);background:var(--ok-bg)} .s-n{color:var(--mut);background:#EEEAF2} .s-p{color:var(--p);background:var(--p-soft)}
+.sec{font-size:16px;font-weight:700;margin:24px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:13px;color:var(--mut);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:600}
+.inp{height:44px;min-width:160px;border:1px solid var(--line2);border-radius:8px;background:var(--w);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--ink)}
+.inp .ch{margin-left:auto;color:var(--mut);display:flex}
+.inp.ph2{color:var(--mut)}
+.inp.fc{border-color:var(--p);outline:2px solid var(--p);outline-offset:2px}
+.inp.er{border-color:var(--dan);border-width:2px}
+.inp.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.hint{font-size:12px;color:var(--mut);font-weight:400}.err{font-size:12px;color:var(--dan);font-weight:600;display:flex;gap:4px;align-items:center}
+.seg{display:inline-flex;align-self:flex-start;width:max-content;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg span{height:44px;padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink2);border-left:1px solid var(--line2)}
+.seg span:first-child{border-left:0}.seg span.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.sk{background:linear-gradient(90deg,#ECE8F0,#F4F1F7);border-radius:6px}
+.blk{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:40px 24px}
+.blk .ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p-soft);color:var(--p)}
+.blk.e .ic{background:var(--dan-bg);color:var(--dan)}
+.blk h3{font-size:16px;font-weight:700}.blk p{font-size:14px;color:var(--mut);max-width:440px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:8px;padding:10px 12px 10px 16px;font-size:14px;box-shadow:0 8px 24px rgba(42,31,56,.22)}
+.toast .lnk{color:#E9DDF7}
+.toast.fx{position:absolute;right:24px;bottom:24px;z-index:9}
+.drawerR{position:absolute;top:56px;right:0;bottom:0;width:440px;background:var(--w);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(42,31,56,.12);z-index:6;padding:20px 24px;overflow:hidden}
+.bar{height:8px;border-radius:4px;background:#ECE8F0;overflow:hidden}.bar i{display:block;height:100%;background:var(--p)}
+
+.steps{display:flex;gap:0;margin-bottom:16px;background:var(--w);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stp{flex:1;display:flex;align-items:center;gap:10px;padding:12px 16px;border-left:1px solid var(--line);font-size:14px;color:var(--mut);min-height:56px}
+.stp:first-child{border-left:0}.stp b{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#EEEAF2;color:var(--ink2);font-size:13px;flex:none}
+.stp.done b{background:var(--ok);color:#fff}.stp.on{color:var(--p);font-weight:700;background:var(--p-soft)}.stp.on b{background:var(--p);color:#fff}
+.dl .w2{grid-column:span 2}
+.dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 24px}.dl div{font-size:14px}.dl small{display:block;font-size:12px;color:var(--mut)}
+.tl{position:relative;padding-left:24px}.tl:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tli{position:relative;padding:6px 0 12px}.tli:before{content:"";position:absolute;left:-22px;top:10px;width:12px;height:12px;border-radius:50%;background:var(--w);border:2px solid var(--line2)}
+.tli.on:before{background:var(--p);border-color:var(--p)}
+.ibx{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 8px;border-top:1px solid var(--line)}
+.ibx.un{background:#FBF8FE}.ibx .ic2{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p-soft);color:var(--p)}
+.ibx .ic2.d{background:var(--dan-bg);color:var(--dan)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tab{height:44px;display:flex;align-items:center;gap:6px;padding:0 16px;font-size:14px;color:var(--ink2);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--p);font-weight:700;border-bottom-color:var(--p)}
+.a4{background:#fff;box-shadow:0 4px 16px rgba(42,31,56,.18);border-radius:2px}
+.lab{border:1px dashed var(--line2);border-radius:4px;padding:6px;display:flex;gap:8px;align-items:center;font-size:12px;line-height:1.4}
+.qr{width:48px;height:48px;background:repeating-conic-gradient(#2A1F38 0 25%,#fff 0 50%) 0 0/8px 8px;flex:none;border-radius:2px}
+
+.fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}
+.fg .w2{grid-column:1/-1}
+.fg3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fld .req{color:var(--dan);margin-left:2px}
+.fld .opt{color:var(--mut);font-weight:400}
+.fs{border:0;min-width:0}.fs legend{font-size:16px;font-weight:700;margin-bottom:12px;padding:0}
+.fs+.fs{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.rg{display:flex;gap:8px;flex-wrap:wrap}
+.rg label{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line2);border-radius:8px;font-weight:400;color:var(--ink2);background:var(--w)}
+.rg label:has(input:checked){border-color:var(--p);background:var(--p-soft);color:var(--p);font-weight:700}
+.cb{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-weight:400;color:var(--ink2)}
+.formbar{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.errsum{display:flex;gap:10px;align-items:flex-start;background:var(--dan-bg);border:1px solid #F5C9C5;color:var(--dan);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:14px}
+.errsum ul{margin:4px 0 0 18px;color:var(--ink2)}
+.okbox{display:flex;gap:10px;align-items:center;background:var(--ok-bg);border:1px solid #BFE0C9;color:var(--ok);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-weight:600}
+.okbox .sp{flex:1}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--w);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h3{font-size:16px;font-weight:700;line-height:1.4}
+.card .ft{display:flex;gap:8px;align-items:center;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.qa a,.qa button{display:flex;align-items:center;gap:12px;min-height:64px;padding:12px 16px;background:var(--w);border:1px solid var(--line);border-radius:8px;font-weight:700;color:var(--ink);font-size:15px;font-family:inherit;text-align:left}
+.qa .qi{width:40px;height:40px;border-radius:10px;background:var(--p-soft);color:var(--p);display:flex;align-items:center;justify-content:center;flex:none}
+.tl2 li{list-style:none;display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:12px;padding:12px 0;border-top:1px solid var(--line);align-items:center}
+.tl2 li:first-child{border-top:0}
+.drop{border:2px dashed var(--line2);border-radius:8px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;color:var(--ink2);background:#FBFAFD}
+.drop input[type=file]{max-width:100%;font:inherit;font-size:14px}
+.chart{width:100%;height:auto;display:block}
+.mapc{position:relative;background:#FBFAFD;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.geo{margin-top:16px}.geo .fg{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.nudge{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.nudge .ng{display:grid;grid-template-columns:repeat(3,44px);gap:6px}
+.nudge .nb{width:44px;min-width:44px;height:44px;padding:0;justify-content:center}
+.nudge .ng2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.nudge .ng2 .btn{justify-content:center}
+.split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start}
+.pick{display:flex;flex-direction:column}
+.pick a,.pick div.pi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:10px 12px;border-radius:8px;border:1px solid transparent;min-height:44px}
+.pick .on{border-color:var(--p);background:var(--p-soft)}
+.meter{display:flex;align-items:center;gap:8px}.meter .bar{flex:1;min-width:60px}
+.tabs a.tab{color:var(--ink2)}
+.steps{list-style:none}
+.ovl{position:absolute;inset:0;background:rgba(42,31,56,.45);z-index:8;display:flex;align-items:center;justify-content:center}
+.dlg{width:480px;max-width:calc(100% - 32px);background:var(--w);border-radius:12px;padding:24px;box-shadow:0 16px 40px rgba(42,31,56,.3);display:flex;flex-direction:column;gap:12px}
+.dlg h2{font-size:20px;font-weight:700;line-height:1.4}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+input.inp,select.inp,textarea.inp{font:inherit;font-weight:400;width:100%;min-width:0;color:var(--ink);background-color:var(--w)}
+input.inp::placeholder,textarea.inp::placeholder{color:var(--mut)}
+textarea.inp{height:auto;min-height:88px;padding:10px 12px;resize:vertical;display:block;line-height:1.6}
+.fld>label{color:var(--ink2)}
+input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:var(--p);flex:none;margin:0}
+
+</style><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="#F7F5FA" name="theme-color"/>
+<script>if(window.self!==window.top)document.documentElement.classList.add('in-frame')</script>
+<link href="../assets/favicon.svg" rel="icon" type="image/svg+xml"/><link href="../assets/site.css" rel="stylesheet"/><script defer="" src="../assets/site.js"></script><body><a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a><nav aria-label="แถบดูแบบ" class="rv" id="rv"><a class="rv-home" href="../index.html"><span class="rv-wm" translate="no">VALIS</span><span>ต้นแบบหน้าจอ</span></a><div class="rv-id"><b>08-2 พลังงาน</b><small>แถบนี้ใช้ดูแบบเท่านั้น ไม่ใช่ส่วนของระบบ</small></div><div class="rv-tools"><a class="rv-b rv-sec" href="../walkthrough.html"><span>ลำดับเดโม</span></a><a class="rv-b rv-sec" href="../screens.html"><span>สารบัญ</span></a></div><button aria-controls="rv" aria-expanded="false" class="rv-more" type="button"><span>ตัวเลือก</span><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></button><div aria-label="สถานะของหน้านี้" class="rv-st" role="group"><span class="rv-lab">สถานะ</span><a class="rv-c" href="08-2-compare-1440-default.html"><span>ปกติ</span></a><a class="rv-c" href="08-2-compare-1440-loading.html"><span>กำลังโหลด</span></a><a aria-current="page" class="rv-c on" href="08-2-compare-1440-empty.html"><span>ไม่มีข้อมูล</span></a><a class="rv-c" href="08-2-compare-1440-error.html"><span>ผิดพลาด</span></a></div><div aria-label="ดูหน้านี้ที่ความกว้างจอ" class="rv-st rv-ws" role="group"><span class="rv-lab">ดูที่จอ</span><a class="rv-c rv-w" href="../preview.html?p=s/08-2-compare-1440-empty.html&amp;w=390"><span>มือถือ 390</span></a><a class="rv-c rv-w" href="../preview.html?p=s/08-2-compare-1440-empty.html&amp;w=768"><span>iPad แนวตั้ง 768</span></a><a class="rv-c rv-w" href="../preview.html?p=s/08-2-compare-1440-empty.html&amp;w=1024"><span>iPad แนวนอน 1024</span></a><a class="rv-c rv-w" href="../preview.html?p=s/08-2-compare-1440-empty.html&amp;w=1440"><span>เดสก์ท็อป 1440</span></a></div></nav><div class="screen"><header class="top"><button aria-controls="nav" aria-expanded="false" aria-label="เปิดเมนู" class="ib nav-tg" type="button"><svg aria-hidden="true" class="bi bi-list" fill="currentColor" height="22" viewbox="0 0 16 16" width="22" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" fill-rule="evenodd"></path>
+</svg></button><a aria-label="ยุบแถบด้านข้าง" class="ib side-tg" href="shell-1440-collapsed.html"><svg aria-hidden="true" class="bi bi-layout-sidebar" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2z"></path>
+</svg></a><a aria-label="VALIS หน้าแรก" class="wm" href="exec-dashboard-1440-default.html" translate="no">VALIS</a><span class="ph">สมมติฐาน — รอพี่คง</span><span class="hosp">โรงพยาบาลตัวอย่าง</span><span class="sp"></span><span class="date">20 พ.ย. 2569</span>
+<a aria-label="การแจ้งเตือน 3 รายการ" class="ib" href="09-5-inbox-1440.html"><svg aria-hidden="true" class="bi bi-bell" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+</svg><span class="badge">3</span></a>
+<a aria-label="โปรไฟล์ ผู้ใช้ตัวอย่าง" class="user" href="C-06-profile-1440-default.html"><div class="av"><svg aria-hidden="true" class="bi bi-person" fill="currentColor" height="18" viewbox="0 0 16 16" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+</svg></div><div><div class="un">ผู้ใช้ตัวอย่าง</div><div class="ur"><span class="lv">LV1</span>ผู้ใช้งาน</div></div><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></a></header><div class="body"><nav aria-label="เมนูหลัก" class="side" id="nav"><div class="nav-hd"><a aria-label="VALIS หน้าแรก" class="wm" href="exec-dashboard-1440-default.html" translate="no">VALIS</a><span class="ph">สมมติฐาน — รอพี่คง</span><button aria-label="ปิดเมนู" class="ib nav-x" data-nav-close="" type="button"><svg aria-hidden="true" class="bi bi-x-lg" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
+</svg></button></div><div class="nav-who"><span class="hosp">โรงพยาบาลตัวอย่าง</span><span class="date">20 พ.ย. 2569</span></div><div class="gh"><span>ภาพรวม</span></div><a class="it" data-tip="แดชบอร์ดผู้บริหาร" href="exec-dashboard-1440-default.html"><svg aria-hidden="true" class="bi bi-speedometer2" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.39.39 0 0 0-.029-.518z"></path>
+<path d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A8 8 0 0 1 0 10m8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3" fill-rule="evenodd"></path>
+</svg><span>แดชบอร์ดผู้บริหาร</span></a><a class="it" data-tip="ต้องทำวันนี้" href="09-4-today-1440-default.html"><svg aria-hidden="true" class="bi bi-calendar-check" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"></path>
+<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"></path>
+</svg><span>ต้องทำวันนี้</span></a><a class="it" data-tip="กล่องแจ้งเตือน" href="09-5-inbox-1440.html"><svg aria-hidden="true" class="bi bi-bell" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+</svg><span>กล่องแจ้งเตือน</span><span class="cnt">3</span></a><div class="gh"><span>ติดตาม</span></div><a aria-expanded="false" class="it" data-tip="ตำแหน่งอุปกรณ์" href="01-1-map-1440-default.html"><svg aria-hidden="true" class="bi bi-geo-alt" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"></path>
+<path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path>
+</svg><span>ตำแหน่งอุปกรณ์</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></span></a><a aria-expanded="false" class="it" data-tip="ประตู UHF" href="02-1-gate-1440-default.html"><svg aria-hidden="true" class="bi bi-door-open" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"></path>
+<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"></path>
+</svg><span>ประตู UHF</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></span></a><a aria-expanded="false" class="it" data-tip="อุณหภูมิตู้เย็น" href="10-1-overview-1440-default.html"><svg aria-hidden="true" class="bi bi-thermometer-half" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415"></path>
+<path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"></path>
+</svg><span>อุณหภูมิตู้เย็น</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></span></a><div class="gh"><span>งานครุภัณฑ์</span></div><a aria-expanded="false" class="it" data-tip="ทะเบียนครุภัณฑ์" href="04-1-registry-1440-default.html"><svg aria-hidden="true" class="bi bi-folder" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"></path>
+</svg><span>ทะเบียนครุภัณฑ์</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></span></a><a aria-expanded="false" class="it" data-tip="งานซ่อม" href="05-1-dashboard-1440-default.html"><svg aria-hidden="true" class="bi bi-tools" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"></path>
+</svg><span>งานซ่อม</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></span></a><div class="gh"><span>รายงาน</span></div><a aria-expanded="true" class="it" data-tip="พลังงาน" href="energy-1440-default.html"><svg aria-hidden="true" class="bi bi-lightning-charge" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41z"></path>
+</svg><span>พลังงาน</span><span class="ch"><svg aria-hidden="true" class="bi bi-chevron-up" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" fill-rule="evenodd"></path>
+</svg></span></a><a class="sub" href="energy-1440-default.html">แดชบอร์ดพลังงาน</a><a aria-current="page" class="sub on" href="08-2-compare-1440-default.html">พลังงาน (เปรียบเทียบ)</a></nav><main class="main" id="main" tabindex="-1"><nav aria-label="ตำแหน่งของหน้า" class="crumb"><a href="energy-1440-default.html">รายงาน</a><span aria-hidden="true"> / </span><a href="energy-1440-default.html">พลังงาน</a><span aria-hidden="true"> / </span><b aria-current="page">พลังงาน (เปรียบเทียบ)</b></nav><div class="hdr"><div><h1>พลังงาน (เปรียบเทียบ)</h1><div class="lead">เทียบการใช้ไฟของอาคาร ห้อง หรืออุปกรณ์</div></div><div class="acts"><a class="btn o" href="esg-export-1440-default.html"><svg aria-hidden="true" class="bi bi-download" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
+<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"></path>
+</svg>ส่งออกข้อมูลพลังงาน</a></div></div><section class="pan"><div class="blk"><div class="ic"><svg aria-hidden="true" class="bi bi-inbox" fill="currentColor" height="24" viewbox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.98 4a.5.5 0 0 0-.39.188L1.54 8H6a.5.5 0 0 1 .5.5 1.5 1.5 0 1 0 3 0A.5.5 0 0 1 10 8h4.46l-3.05-3.812A.5.5 0 0 0 11.02 4zm9.954 5H10.45a2.5 2.5 0 0 1-4.9 0H1.066l.32 2.562a.5.5 0 0 0 .497.438h12.234a.5.5 0 0 0 .496-.438zM3.809 3.563A1.5 1.5 0 0 1 4.981 3h6.038a1.5 1.5 0 0 1 1.172.563l3.7 4.625a.5.5 0 0 1 .105.374l-.39 3.124A1.5 1.5 0 0 1 14.117 13H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .106-.374z"></path>
+</svg></div><h3>ยังไม่ได้เลือกรายการ</h3><p>เพิ่มอาคาร ห้อง หรืออุปกรณ์อย่างน้อย 1 รายการเพื่อเริ่มเปรียบเทียบ</p></div></section></main><div class="nav-scrim" data-nav-close="" hidden=""></div></div></div></body></html>

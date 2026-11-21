@@ -1,0 +1,139 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F7F5FA"><title>ลำดับเดโม – VALIS ต้นแบบหน้าจอ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#662F90;--p-h:#55267A;--p-soft:#EFE6F8;--ink:#2A1F38;--ink2:#3D3150;--mut:#5E5270;--line:#E3DDEA;--line2:#8A7D9C;--bg:#F7F5FA;--w:#fff;
+--warn:#8A4B00;--warn-bg:#FFF4E0;--dan:#B42318;--dan-bg:#FEECEB;--ok:#1E6B3A;--ok-bg:#E6F4EA;--inf:#1D4F91;--inf-bg:#E8F0FB;--dis-bg:#ECE8F0;--dis:#6E6380}
+body{font-family:'Noto Sans Thai','Noto Sans',sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.6}
+.screen{position:relative;overflow:hidden;background:var(--bg)}
+.top{height:56px;background:var(--w);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px 0 20px;gap:12px;position:relative;z-index:5}
+.wm{font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--p);line-height:1}
+.ph{font-size:12px;color:var(--mut);border:1px dashed var(--line2);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.hosp{font-size:14px;color:var(--ink2);padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.sp{flex:1}
+.date{font-size:13px;color:var(--mut);white-space:nowrap}
+.ib{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.badge{position:absolute;top:6px;right:5px;min-width:18px;height:18px;border-radius:9px;background:var(--dan);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;padding:0 4px}
+.user{display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 4px;border-radius:8px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:var(--p);display:flex;align-items:center;justify-content:center}
+.un{font-size:13px;font-weight:600;line-height:1.3}.ur{font-size:12px;color:var(--mut);line-height:1.3}
+.lv{font-size:12px;font-weight:700;color:var(--p);background:var(--p-soft);border-radius:4px;padding:0 5px;margin-right:4px}
+.body{display:flex;min-height:calc(100% - 56px)}
+.side{width:288px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:12px}
+.it svg,.ri svg,.btn svg{flex-shrink:0}
+.gh{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--mut);padding:10px 12px 4px;height:32px}
+.gh.tg{height:44px;padding:0 12px;border-radius:8px}
+.it{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:8px;color:var(--ink2);font-size:14px;white-space:nowrap;position:relative}
+.it .ch{margin-left:auto;color:var(--mut);display:flex}
+.it.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.it.hv{background:var(--bg);color:var(--ink)}
+.it.fc{outline:2px solid var(--p);outline-offset:2px}
+.sub{padding-left:44px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--mut);border-radius:8px}
+.sub.on{color:var(--p);font-weight:700;background:var(--p-soft)}
+.cnt{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--dan);border-radius:9px;padding:0 7px;line-height:18px}
+.rail{width:72px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:8px 14px;display:flex;flex-direction:column;align-items:center}
+.ri{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.ri.on{background:var(--p-soft);color:var(--p)}
+.ri.hv{background:var(--bg)}
+.rdiv{width:32px;height:1px;background:var(--line);margin:6px 0;flex:none}
+.tip{position:absolute;left:56px;top:6px;background:var(--ink);color:#fff;font-size:13px;padding:4px 10px;border-radius:6px;white-space:nowrap;z-index:9;line-height:1.6}
+.tip small{display:block;color:#E9DDF7;font-size:12px}
+.main{flex:1;min-width:0;padding:24px 32px 32px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:4px}.crumb b{color:var(--ink2);font-weight:600}
+.hdr{display:flex;align-items:flex-end;gap:16px;margin-bottom:16px}
+h1{font-size:24px;line-height:1.4;font-weight:700}
+.lead{font-size:14px;color:var(--mut)}
+.acts{margin-left:auto;display:flex;gap:8px;flex:none}
+.btn{height:44px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:inherit;border:1px solid transparent;flex:none}
+.btn.pr{background:var(--p);color:#fff;border-color:var(--p)} .btn.pr.hv{background:var(--p-h);border-color:var(--p-h)}
+.btn.o{border-color:var(--line2);background:var(--w);color:var(--ink2)}
+.btn.gh2{background:transparent;color:var(--p)}
+.btn.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.btn.fc{outline:2px solid var(--p);outline-offset:2px}
+.btn.dan{background:var(--w);color:var(--dan);border-color:var(--dan)}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff}
+.spin.d{border-color:#CFC6DA;border-top-color:var(--p)}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);background:var(--w);border:1px solid #D9CCE8;border-radius:6px;padding:6px 12px;margin-bottom:16px}
+.note.w{background:var(--warn-bg);border-color:#F0D9B5}
+.note.e{background:var(--dan-bg);border-color:#F5C9C5}
+.tag{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;white-space:nowrap;line-height:20px;display:inline-block}
+.t-s{color:var(--warn);background:var(--warn-bg)} .t-sim{color:var(--mut);background:#EEEAF2} .t-est{color:var(--p);background:var(--p-soft)} .t-pil{color:var(--inf);background:var(--inf-bg)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);background:var(--w);border:1px solid var(--line);border-radius:8px;margin-bottom:16px}
+.k{padding:12px 20px;border-left:1px solid var(--line)} .k:first-child{border-left:0}
+.kl{font-size:13px;color:var(--mut)} .kv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+.kv small{font-size:13px;font-weight:500;color:var(--mut);margin-left:4px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pan{background:var(--w);border:1px solid var(--line);border-radius:8px;padding:16px 20px;min-width:0}
+.pt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pt h2{font-size:16px;font-weight:700;margin-right:4px}
+.pt .r{margin-left:auto}
+.fig{display:flex;gap:28px;margin:4px 0 8px;flex-wrap:wrap}
+.fl{font-size:13px;color:var(--mut)} .fv{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.4}
+.fv.d{color:var(--ok)}
+.def{font-size:12px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px;margin-top:4px;display:flex;gap:16px;align-items:center}
+.lnk{display:inline-flex;align-items:center;min-height:44px;color:var(--p);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;font-size:14px}
+.def .lnk{margin-left:auto}
+.lg{display:flex;gap:16px;font-size:12px;color:var(--ink2);flex-wrap:wrap}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row .n{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.st{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;line-height:20px;white-space:nowrap}
+.s-d{color:var(--dan);background:var(--dan-bg)} .s-w{color:var(--warn);background:var(--warn-bg)} .s-o{color:var(--ok);background:var(--ok-bg)} .s-n{color:var(--mut);background:#EEEAF2} .s-p{color:var(--p);background:var(--p-soft)}
+.sec{font-size:16px;font-weight:700;margin:24px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:13px;color:var(--mut);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:600}
+.inp{height:44px;min-width:160px;border:1px solid var(--line2);border-radius:8px;background:var(--w);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--ink)}
+.inp .ch{margin-left:auto;color:var(--mut);display:flex}
+.inp.ph2{color:var(--mut)}
+.inp.fc{border-color:var(--p);outline:2px solid var(--p);outline-offset:2px}
+.inp.er{border-color:var(--dan);border-width:2px}
+.inp.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.hint{font-size:12px;color:var(--mut);font-weight:400}.err{font-size:12px;color:var(--dan);font-weight:600;display:flex;gap:4px;align-items:center}
+.seg{display:inline-flex;align-self:flex-start;width:max-content;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg span{height:44px;padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink2);border-left:1px solid var(--line2)}
+.seg span:first-child{border-left:0}.seg span.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.sk{background:linear-gradient(90deg,#ECE8F0,#F4F1F7);border-radius:6px}
+.blk{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:40px 24px}
+.blk .ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p-soft);color:var(--p)}
+.blk.e .ic{background:var(--dan-bg);color:var(--dan)}
+.blk h3{font-size:16px;font-weight:700}.blk p{font-size:14px;color:var(--mut);max-width:440px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:8px;padding:10px 12px 10px 16px;font-size:14px;box-shadow:0 8px 24px rgba(42,31,56,.22)}
+.toast .lnk{color:#E9DDF7}
+.toast.fx{position:absolute;right:24px;bottom:24px;z-index:9}
+.drawerR{position:absolute;top:56px;right:0;bottom:0;width:440px;background:var(--w);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(42,31,56,.12);z-index:6;padding:20px 24px;overflow:hidden}
+.bar{height:8px;border-radius:4px;background:#ECE8F0;overflow:hidden}.bar i{display:block;height:100%;background:var(--p)}
+</style><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/site.css"><script src="assets/site.js" defer></script></head><body class="hub">
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a><header class="hub-top"><div class="hub-in"><span class="wm" translate="no">VALIS</span><span class="ph">สมมติฐาน — รอพี่คง</span><nav aria-label="หน้าหลักของต้นแบบ"><a href="index.html">หน้าแรก</a><a href="walkthrough.html" aria-current=page>ลำดับเดโม</a><a href="screens.html">สารบัญทุกหน้า</a></nav></div></header><main id="main" tabindex="-1" class="hub-in" style="padding-top:40px;padding-bottom:40px">
+<h1>ลำดับเดโม</h1><p class="lead">24 หน้าตามลำดับที่ใช้นำเสนอ ในแต่ละหน้ามีปุ่มก่อนหน้าและถัดไปบนแถบด้านบน</p>
+<div class="hub-acts"><a class="btn pr hub-cta" href="s/login-1440-default.html">เริ่มหน้า 1</a></div><section class="wk-ch"><h2>เข้าสู่ระบบและโครงแอป<small>หน้า 1–3</small></h2><ol class="wk" start="1"><li><span class="n" aria-hidden="true">1</span><a class="th" href="s/login-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/login-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>เข้าสู่ระบบ</h3><p class="meta">C-01 หน้าเข้าสู่ระบบ · สถานะปกติ</p><p>หน้าเข้าสู่ระบบ VALIS จุดแรกที่ลูกค้าเห็นในเดโม</p><a class="btn o" href="s/login-1440-default.html">เปิดหน้า 1</a></div></li><li><span class="n" aria-hidden="true">2</span><a class="th" href="s/shell-1440-normal.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/shell-1440-normal.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>โครงแอปและเมนู</h3><p class="meta">C-03 โครงแอป: แถบเมนูข้าง + แถบบน · สถานะปกติ</p><p>โครงแอปหลัก เมนูซ้ายแบ่ง 6 กลุ่ม ใช้กับทุกหน้า</p><a class="btn o" href="s/shell-1440-normal.html">เปิดหน้า 2</a></div></li><li><span class="n" aria-hidden="true">3</span><a class="th" href="preview.html?p=s/shell-1440-normal.html&w=1024&t=3" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/shell-1024-rail.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>เมนูไอคอน จอ 1024</h3><p class="meta">C-03 โครงแอป: แถบเมนูข้าง + แถบบน · สถานะปกติ · ดูที่จอ 1024</p><p>จอ 1024 (iPad แนวนอน) เมนูย่อเหลือไอคอน ชี้แล้วขึ้นชื่อ</p><a class="btn o" href="preview.html?p=s/shell-1440-normal.html&w=1024&t=3">เปิดหน้า 3</a></div></li></ol></section><section class="wk-ch"><h2>แดชบอร์ดผู้บริหารและต้นทุน<small>หน้า 4–6</small></h2><ol class="wk" start="4"><li><span class="n" aria-hidden="true">4</span><a class="th" href="s/exec-dashboard-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/exec-dashboard-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>แดชบอร์ดผู้บริหาร + ต้นทุน</h3><p class="meta">09-1 แดชบอร์ดผู้บริหาร (หน้าเดียว) + ส่วนต้นทุนก่อน–หลัง และพยากรณ์ปีหน้า · สถานะปกติ</p><p>แดชบอร์ดผู้บริหาร มีส่วนต้นทุนซ่อมก่อน–หลังใช้ระบบและพยากรณ์ เป็นจุดขายหลักของเดโม</p><a class="btn o" href="s/exec-dashboard-1440-default.html">เปิดหน้า 4</a></div></li><li><span class="n" aria-hidden="true">5</span><a class="th" href="s/exec-dashboard-1440-lv1-no-cost-section.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/exec-dashboard-1440-lv1-no-cost-section.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>แดชบอร์ดของผู้ใช้ LV1</h3><p class="meta">09-1 แดชบอร์ดผู้บริหาร (หน้าเดียว) + ส่วนต้นทุนก่อน–หลัง และพยากรณ์ปีหน้า · สถานะผู้ใช้ LV1 (ไม่เห็นต้นทุน)</p><p>แดชบอร์ดเดียวกันเมื่อผู้ใช้สิทธิ์ต่ำเข้า ส่วนต้นทุนถูกซ่อน</p><a class="btn o" href="s/exec-dashboard-1440-lv1-no-cost-section.html">เปิดหน้า 5</a></div></li><li><span class="n" aria-hidden="true">6</span><a class="th" href="s/replacement-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/replacement-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>เครื่องที่ควรทดแทน</h3><p class="meta">09-3 เครื่องที่ควรพิจารณาทดแทน (drill-down) · สถานะปกติ</p><p>รายการเครื่องที่ควรพิจารณาทดแทน เรียงตามค่าซ่อมสะสมเทียบมูลค่า</p><a class="btn o" href="s/replacement-1440-default.html">เปิดหน้า 6</a></div></li></ol></section><section class="wk-ch"><h2>สอบเทียบ PM และ HA<small>หน้า 7–9</small></h2><ol class="wk" start="7"><li><span class="n" aria-hidden="true">7</span><a class="th" href="s/ipm-dashboard-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/ipm-dashboard-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>แดชบอร์ด IPM</h3><p class="meta">06-1 แดชบอร์ด IPM · สถานะปกติ</p><p>แดชบอร์ดสอบเทียบและบำรุงรักษา 12 เดือน แผนเทียบงานที่ทำ แยกตามระดับความเสี่ยง</p><a class="btn o" href="s/ipm-dashboard-1440-default.html">เปิดหน้า 7</a></div></li><li><span class="n" aria-hidden="true">8</span><a class="th" href="s/ipm-calendar-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/ipm-calendar-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ปฏิทินสอบเทียบ / PM</h3><p class="meta">06-2 ปฏิทินสอบเทียบ / PM · สถานะปกติ</p><p>ปฏิทินงานสอบเทียบและ PM เห็นงานรายวันและงานเลยกำหนด</p><a class="btn o" href="s/ipm-calendar-1440-default.html">เปิดหน้า 8</a></div></li><li><span class="n" aria-hidden="true">9</span><a class="th" href="s/ha-pack-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/ha-pack-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ชุดหลักฐาน HA</h3><p class="meta">06-7 ชุดหลักฐานตรวจประเมิน · สถานะปกติ</p><p>ชุดหลักฐานสำหรับตรวจประเมิน HA รวมเอกสารเครื่องมือแพทย์ในที่เดียว</p><a class="btn o" href="s/ha-pack-1440-default.html">เปิดหน้า 9</a></div></li></ol></section><section class="wk-ch"><h2>พลังงานและ ESG<small>หน้า 10–11</small></h2><ol class="wk" start="10"><li><span class="n" aria-hidden="true">10</span><a class="th" href="s/energy-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/energy-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>แดชบอร์ดพลังงาน</h3><p class="meta">08-1 แดชบอร์ดพลังงาน + Top 10 ห้อง · สถานะปกติ</p><p>การใช้พลังงานของเครื่องมือแพทย์ เป็นหน่วยไฟและค่าไฟโดยประมาณ</p><a class="btn o" href="s/energy-1440-default.html">เปิดหน้า 10</a></div></li><li><span class="n" aria-hidden="true">11</span><a class="th" href="s/esg-export-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/esg-export-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>รายงาน ESG</h3><p class="meta">08-3 รายงานพลังงานสำหรับความยั่งยืน · สถานะปกติ</p><p>ส่งออกข้อมูลพลังงานสำหรับรายงานความยั่งยืน (ESG)</p><a class="btn o" href="s/esg-export-1440-default.html">เปิดหน้า 11</a></div></li></ol></section><section class="wk-ch"><h2>อุณหภูมิตู้เย็น<small>หน้า 12–15</small></h2><ol class="wk" start="12"><li><span class="n" aria-hidden="true">12</span><a class="th" href="s/10-1-overview-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/10-1-overview-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ตู้เย็นนอกช่วง</h3><p class="meta">10-1 ภาพรวมตู้ทั้งหมด · สถานะปกติ</p><p>ภาพรวมตู้เย็น 4 ตู้ มีแถบเตือนแดงเมื่อตู้วัคซีนอุณหภูมิเกินช่วง</p><a class="btn o" href="s/10-1-overview-1440-default.html">เปิดหน้า 12</a></div></li><li><span class="n" aria-hidden="true">13</span><a class="th" href="s/10-4-ack-dialog-1440.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/10-4-ack-dialog-1440.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>รับทราบการเตือน</h3><p class="meta">10-4 แจ้งเตือนนอกช่วง + รับทราบ · สถานะปกติ</p><p>กล่องรับทราบการเตือน บันทึกว่าใครรับทราบและทำอะไรไปแล้ว</p><a class="btn o" href="s/10-4-ack-dialog-1440.html">เปิดหน้า 13</a></div></li><li><span class="n" aria-hidden="true">14</span><a class="th" href="s/10-1-overview-1440-ack.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/10-1-overview-1440-ack.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>หลังรับทราบ</h3><p class="meta">10-1 ภาพรวมตู้ทั้งหมด · สถานะรับทราบแล้ว</p><p>หลังรับทราบ แถบเตือนเปลี่ยนเป็นสถานะรับทราบแล้ว พร้อมเวลาและชื่อผู้รับทราบ</p><a class="btn o" href="s/10-1-overview-1440-ack.html">เปิดหน้า 14</a></div></li><li><span class="n" aria-hidden="true">15</span><a class="th" href="s/10-2-detail-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/10-2-detail-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>กราฟอุณหภูมิ 24 ชม.</h3><p class="meta">10-2 รายละเอียดตู้: กราฟ 24 ชม. + สูงสุด–ต่ำสุดรายวัน · สถานะปกติ</p><p>กราฟอุณหภูมิ 24 ชั่วโมงของตู้ เห็นช่วงที่ตั้งไว้และจุดที่เกินช่วง</p><a class="btn o" href="s/10-2-detail-1440-default.html">เปิดหน้า 15</a></div></li></ol></section><section class="wk-ch"><h2>ประตู แผนผัง ทะเบียน<small>หน้า 16–19</small></h2><ol class="wk" start="16"><li><span class="n" aria-hidden="true">16</span><a class="th" href="s/02-1-gate-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/02-1-gate-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>จอประตู UHF</h3><p class="meta">02-1 จอแสดงผลประตู · สถานะปกติ</p><p>จอประตู UHF สำหรับเปิดบนจอใหญ่ ตัวอักษรใหญ่ อ่านได้จากระยะไกล</p><a class="btn o" href="s/02-1-gate-1440-default.html">เปิดหน้า 16</a></div></li><li><span class="n" aria-hidden="true">17</span><a class="th" href="s/02-1-gate-1440-alarm.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/02-1-gate-1440-alarm.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ออกโดยไม่ได้รับอนุญาต</h3><p class="meta">02-1 จอแสดงผลประตู · สถานะออกโดยไม่ได้รับอนุญาต</p><p>จอประตูตอนเครื่องออกโดยไม่ได้รับอนุญาต เตือนแดงเต็มจอ</p><a class="btn o" href="s/02-1-gate-1440-alarm.html">เปิดหน้า 17</a></div></li><li><span class="n" aria-hidden="true">18</span><a class="th" href="s/01-1-map-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/01-1-map-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>แผนผังตำแหน่ง</h3><p class="meta">01-1 แผนผังตำแหน่ง · สถานะปกติ</p><p>แผนผังชั้น แสดงว่าเครื่องแต่ละเครื่องอยู่ห้องไหน</p><a class="btn o" href="s/01-1-map-1440-default.html">เปิดหน้า 18</a></div></li><li><span class="n" aria-hidden="true">19</span><a class="th" href="s/04-1-registry-1440-default.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/04-1-registry-1440-default.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ทะเบียนครุภัณฑ์</h3><p class="meta">04-1 ข้อมูลทะเบียนครุภัณฑ์ · สถานะปกติ</p><p>ทะเบียนครุภัณฑ์ เห็นว่าเครื่องไหนติดป้าย BLE, UHF หรือปลั๊กวัดไฟ และพิมพ์ป้าย QR ได้หลายเครื่องพร้อมกัน</p><a class="btn o" href="s/04-1-registry-1440-default.html">เปิดหน้า 19</a></div></li></ol></section><section class="wk-ch"><h2>หน้าที่ปรับหน้าตา<small>หน้า 20–24</small></h2><ol class="wk" start="20"><li><span class="n" aria-hidden="true">20</span><a class="th" href="s/03-3-scan-borrow-1440.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/03-3-scan-borrow-1440.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>สแกนยืมเครื่อง</h3><p class="meta">03-3 สแกนยืมเครื่อง (3 ขั้น) · สถานะปกติ</p><p>สแกนยืมเครื่อง 3 ขั้น หน้าเดิมที่ปรับให้เข้ากับหน้าตาใหม่</p><a class="btn o" href="s/03-3-scan-borrow-1440.html">เปิดหน้า 20</a></div></li><li><span class="n" aria-hidden="true">21</span><a class="th" href="s/04-2-device-detail-1440.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/04-2-device-detail-1440.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>รายละเอียดครุภัณฑ์</h3><p class="meta">04-2 รายละเอียดครุภัณฑ์ · สถานะปกติ</p><p>รายละเอียดเครื่อง รวมค่าซ่อมสะสม ประวัติ และตำแหน่งล่าสุด</p><a class="btn o" href="s/04-2-device-detail-1440.html">เปิดหน้า 21</a></div></li><li><span class="n" aria-hidden="true">22</span><a class="th" href="preview.html?p=s/04-5-public-qr-1440.html&w=390&t=22" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/04-5-public-qr-390.png" width="640" height="398" alt="" loading="lazy"></a>
+<div><h3>สแกน QR บนมือถือ</h3><p class="meta">04-5 หน้าสแกน QR สาธารณะ · สถานะปกติ · ดูที่จอ 390</p><p>หน้าที่เปิดเมื่อสแกน QR บนตัวเครื่องด้วยมือถือ ไม่ต้องเข้าสู่ระบบ</p><a class="btn o" href="preview.html?p=s/04-5-public-qr-1440.html&w=390&t=22">เปิดหน้า 22</a></div></li><li><span class="n" aria-hidden="true">23</span><a class="th" href="s/05-6-service-timeline-1440.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/05-6-service-timeline-1440.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>ไทม์ไลน์งานซ่อม</h3><p class="meta">05-6 ไทม์ไลน์งานซ่อม · สถานะปกติ</p><p>ไทม์ไลน์งานซ่อม เห็นว่างานซ่อมอยู่ขั้นไหนและใช้อะไหล่อะไร</p><a class="btn o" href="s/05-6-service-timeline-1440.html">เปิดหน้า 23</a></div></li><li><span class="n" aria-hidden="true">24</span><a class="th" href="s/C-04-export-header-1440.html" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/C-04-export-header-1440.png" width="640" height="400" alt="" loading="lazy"></a>
+<div><h3>หัวเอกสาร PDF</h3><p class="meta">C-04 หัวเอกสารพิมพ์และไฟล์ส่งออก · สถานะปกติ</p><p>ตัวอย่างหัวเอกสาร PDF ที่ส่งออก มีชื่อระบบ ชื่อรายงาน วันที่ และเลขหน้า</p><a class="btn o" href="s/C-04-export-header-1440.html">เปิดหน้า 24</a></div></li></ol></section></main><footer class="hub-foot"><div class="hub-in">ตัวเลขและชื่อทุกตัวในต้นแบบนี้เป็นข้อมูลตัวอย่างหรือข้อมูลจำลอง ไม่ใช่ข้อมูลโรงพยาบาลจริง · สีม่วง #662F90 เป็นสีชั่วคราว — รอแบรนด์ · อัปเดต 20 พ.ย. 2569</div></footer></body></html>

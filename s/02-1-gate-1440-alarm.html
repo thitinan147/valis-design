@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="th"><meta charset="utf-8"/><title>จอแสดงผลประตู (ออกโดยไม่ได้รับอนุญาต) – VALIS ต้นแบบหน้าจอ</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#662F90;--p-h:#55267A;--p-soft:#EFE6F8;--ink:#2A1F38;--ink2:#3D3150;--mut:#5E5270;--line:#E3DDEA;--line2:#8A7D9C;--bg:#F7F5FA;--w:#fff;
+--warn:#8A4B00;--warn-bg:#FFF4E0;--dan:#B42318;--dan-bg:#FEECEB;--ok:#1E6B3A;--ok-bg:#E6F4EA;--inf:#1D4F91;--inf-bg:#E8F0FB;--dis-bg:#ECE8F0;--dis:#6E6380}
+body{font-family:'Noto Sans Thai','Noto Sans',sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.6}
+.screen{position:relative;overflow:hidden;background:var(--bg)}
+.top{height:56px;background:var(--w);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px 0 20px;gap:12px;position:relative;z-index:5}
+.wm{font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--p);line-height:1}
+.ph{font-size:12px;color:var(--mut);border:1px dashed var(--line2);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.hosp{font-size:14px;color:var(--ink2);padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.sp{flex:1}
+.date{font-size:13px;color:var(--mut);white-space:nowrap}
+.ib{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.badge{position:absolute;top:6px;right:5px;min-width:18px;height:18px;border-radius:9px;background:var(--dan);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;padding:0 4px}
+.user{display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 4px;border-radius:8px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:var(--p);display:flex;align-items:center;justify-content:center}
+.un{font-size:13px;font-weight:600;line-height:1.3}.ur{font-size:12px;color:var(--mut);line-height:1.3}
+.lv{font-size:12px;font-weight:700;color:var(--p);background:var(--p-soft);border-radius:4px;padding:0 5px;margin-right:4px}
+.body{display:flex;min-height:calc(100% - 56px)}
+.side{width:288px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:12px}
+.it svg,.ri svg,.btn svg{flex-shrink:0}
+.gh{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--mut);padding:10px 12px 4px;height:32px}
+.gh.tg{height:44px;padding:0 12px;border-radius:8px}
+.it{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:8px;color:var(--ink2);font-size:14px;white-space:nowrap;position:relative}
+.it .ch{margin-left:auto;color:var(--mut);display:flex}
+.it.on{background:var(--p-soft);color:var(--p);font-weight:700;box-shadow:inset 3px 0 0 var(--p)}
+.it.hv{background:var(--bg);color:var(--ink)}
+.it.fc{outline:2px solid var(--p);outline-offset:2px}
+.sub{padding-left:44px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--mut);border-radius:8px}
+.sub.on{color:var(--p);font-weight:700;background:var(--p-soft)}
+.cnt{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--dan);border-radius:9px;padding:0 7px;line-height:18px}
+.rail{width:72px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:8px 14px;display:flex;flex-direction:column;align-items:center}
+.ri{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.ri.on{background:var(--p-soft);color:var(--p);box-shadow:inset 3px 0 0 var(--p)}
+.ri.hv{background:var(--bg)}
+.rdiv{width:32px;height:1px;background:var(--line);margin:6px 0;flex:none}
+.tip{position:absolute;left:56px;top:6px;background:var(--ink);color:#fff;font-size:13px;padding:4px 10px;border-radius:6px;white-space:nowrap;z-index:9;line-height:1.6}
+.tip small{display:block;color:#E9DDF7;font-size:12px}
+.main{flex:1;min-width:0;padding:24px 32px 32px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:4px}.crumb b{color:var(--ink2);font-weight:600}
+.hdr{display:flex;align-items:flex-end;gap:16px;margin-bottom:16px}
+h1{font-size:24px;line-height:1.4;font-weight:700}
+.lead{font-size:14px;color:var(--mut)}
+.acts{margin-left:auto;display:flex;gap:8px;flex:none}
+.btn{height:44px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:inherit;border:1px solid transparent;flex:none}
+.btn.pr{background:var(--p);color:#fff;border-color:var(--p)} .btn.pr.hv{background:var(--p-h);border-color:var(--p-h)}
+.btn.o{border-color:var(--line2);background:var(--w);color:var(--ink2)}
+.btn.gh2{background:transparent;color:var(--p)}
+.btn.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.btn.fc{outline:2px solid var(--p);outline-offset:2px}
+.btn.dan{background:var(--w);color:var(--dan);border-color:var(--dan)}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff}
+.spin.d{border-color:#CFC6DA;border-top-color:var(--p)}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);background:var(--w);border:1px solid var(--line);border-left:3px solid var(--p);border-radius:6px;padding:6px 12px;margin-bottom:16px}
+.note.w{border-left-color:var(--warn);background:var(--warn-bg);border-color:#F0D9B5}
+.note.e{border-left-color:var(--dan);background:var(--dan-bg);border-color:#F5C9C5}
+.tag{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;white-space:nowrap;line-height:20px;display:inline-block}
+.t-s{color:var(--warn);background:var(--warn-bg)} .t-sim{color:var(--mut);background:#EEEAF2} .t-est{color:var(--p);background:var(--p-soft)} .t-pil{color:var(--inf);background:var(--inf-bg)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);background:var(--w);border:1px solid var(--line);border-radius:8px;margin-bottom:16px}
+.k{padding:12px 20px;border-left:1px solid var(--line)} .k:first-child{border-left:0}
+.kl{font-size:13px;color:var(--mut)} .kv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+.kv small{font-size:13px;font-weight:500;color:var(--mut);margin-left:4px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pan{background:var(--w);border:1px solid var(--line);border-radius:8px;padding:16px 20px;min-width:0}
+.pt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pt h2{font-size:16px;font-weight:700;margin-right:4px}
+.pt .r{margin-left:auto}
+.fig{display:flex;gap:28px;margin:4px 0 8px;flex-wrap:wrap}
+.fl{font-size:13px;color:var(--mut)} .fv{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.4}
+.fv.d{color:var(--ok)}
+.def{font-size:12px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px;margin-top:4px;display:flex;gap:16px;align-items:center}
+.lnk{display:inline-flex;align-items:center;min-height:44px;color:var(--p);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;font-size:14px}
+.def .lnk{margin-left:auto}
+.lg{display:flex;gap:16px;font-size:12px;color:var(--ink2);flex-wrap:wrap}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row .n{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.st{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;line-height:20px;white-space:nowrap}
+.s-d{color:var(--dan);background:var(--dan-bg)} .s-w{color:var(--warn);background:var(--warn-bg)} .s-o{color:var(--ok);background:var(--ok-bg)} .s-n{color:var(--mut);background:#EEEAF2} .s-p{color:var(--p);background:var(--p-soft)}
+.sec{font-size:16px;font-weight:700;margin:24px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:13px;color:var(--mut);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:600}
+.inp{height:44px;min-width:160px;border:1px solid var(--line2);border-radius:8px;background:var(--w);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--ink)}
+.inp .ch{margin-left:auto;color:var(--mut);display:flex}
+.inp.ph2{color:var(--mut)}
+.inp.fc{border-color:var(--p);outline:2px solid var(--p);outline-offset:2px}
+.inp.er{border-color:var(--dan);border-width:2px}
+.inp.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.hint{font-size:12px;color:var(--mut);font-weight:400}.err{font-size:12px;color:var(--dan);font-weight:600;display:flex;gap:4px;align-items:center}
+.seg{display:inline-flex;align-self:flex-start;width:max-content;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg span{height:44px;padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink2);border-left:1px solid var(--line2)}
+.seg span:first-child{border-left:0}.seg span.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.sk{background:linear-gradient(90deg,#ECE8F0,#F4F1F7);border-radius:6px}
+.blk{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:40px 24px}
+.blk .ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p-soft);color:var(--p)}
+.blk.e .ic{background:var(--dan-bg);color:var(--dan)}
+.blk h3{font-size:16px;font-weight:700}.blk p{font-size:14px;color:var(--mut);max-width:440px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:8px;padding:10px 12px 10px 16px;font-size:14px;box-shadow:0 8px 24px rgba(42,31,56,.22)}
+.toast .lnk{color:#E9DDF7}
+.toast.fx{position:absolute;right:24px;bottom:24px;z-index:9}
+.drawerR{position:absolute;top:56px;right:0;bottom:0;width:440px;background:var(--w);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(42,31,56,.12);z-index:6;padding:20px 24px;overflow:hidden}
+.bar{height:8px;border-radius:4px;background:#ECE8F0;overflow:hidden}.bar i{display:block;height:100%;background:var(--p)}
+
+.kz{background:#F7F5FA;display:flex;flex-direction:column}
+.kh{height:72px;background:var(--ink);color:#fff;display:flex;align-items:center;gap:16px;padding:0 24px}
+.kh .wm{color:#fff;font-size:24px}.kh .ph{color:#E9DDF7;border-color:#8A7D9C}
+.kh h1{font-size:24px;font-weight:700;line-height:1.3}
+.clk{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:auto}
+.live{display:flex;align-items:center;gap:8px;font-size:16px;color:#E9DDF7}.live i{width:12px;height:12px;border-radius:50%;background:#4CC38A;display:inline-block}
+.live.off i{background:#F5A524}
+.kt{display:flex;gap:8px;align-items:center;padding:12px 24px;background:var(--w);border-bottom:1px solid var(--line)}
+.kt .btn{font-size:16px}
+.kb{flex:1;display:grid;gap:20px;padding:20px 24px}
+.dc{background:var(--w);border:2px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.dch{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dch h2{font-size:24px;font-weight:700;line-height:1.3}.dch .loc{font-size:16px;color:var(--mut)}
+.dir{font-size:16px;font-weight:700;border-radius:6px;padding:4px 12px;margin-left:auto;white-space:nowrap}
+.dir.in{background:var(--ok-bg);color:var(--ok)}.dir.out{background:var(--warn-bg);color:var(--warn)}
+.dcb{padding:20px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;flex:1}
+.thumb{width:88px;height:88px;border-radius:10px;background:#ECE8F0;display:flex;align-items:center;justify-content:center;color:var(--mut);flex:none}
+.dn{font-size:var(--dn,32px);font-weight:700;line-height:1.3}.dcode{font-size:20px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.dt{font-size:20px;color:var(--mut);margin-top:4px}
+.dcf{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--line);font-size:16px;color:var(--ink2)}
+.dc.flash{border-color:var(--p);box-shadow:0 0 0 4px #EFE6F8}
+.dc.alarm{border-color:var(--dan);border-width:4px}
+.dc.alarm .dch{background:var(--dan);color:#fff}.dc.alarm .dch .loc{color:#FFE3E0}
+.dc.off{border-style:dashed;border-color:var(--line2)}
+.wait{font-size:20px;color:var(--mut);display:flex;gap:12px;align-items:center}
+.feed{background:var(--w);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;flex-direction:column}
+.feed h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.fe{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:16px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;column-gap:32px}
+.fe .tm{font-variant-numeric:tabular-nums;color:var(--mut)}
+.abar{display:flex;align-items:center;gap:16px;background:var(--dan);color:#fff;padding:12px 24px;font-size:24px;font-weight:700}
+.abar .btn{font-size:16px;height:48px}
+</style><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="#F7F5FA" name="theme-color"/>
+<script>if(window.self!==window.top)document.documentElement.classList.add('in-frame')</script>
+<link href="../assets/favicon.svg" rel="icon" type="image/svg+xml"/><link href="../assets/site.css" rel="stylesheet"/><script defer="" src="../assets/site.js"></script><body class="gate"><a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a><nav aria-label="แถบดูแบบ" class="rv rv-tour" id="rv"><a class="rv-home" href="../index.html"><span class="rv-wm" translate="no">VALIS</span><span>ต้นแบบหน้าจอ</span></a><div class="rv-id"><b>02-1 จอแสดงผลประตู</b><small>แถบนี้ใช้ดูแบบเท่านั้น ไม่ใช่ส่วนของระบบ</small></div><div class="rv-tools"><a class="rv-b rv-prev" href="../s/02-1-gate-1440-default.html"><svg aria-hidden="true" class="bi bi-chevron-left" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" fill-rule="evenodd"></path>
+</svg><span class="rv-srm">ก่อนหน้า</span></a><span class="rv-step"><span class="rv-srm">ลำดับเดโม </span>17/24</span><a class="rv-b" href="../s/01-1-map-1440-default.html"><span>ถัดไป</span><svg aria-hidden="true" class="bi bi-chevron-right" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></a><a class="rv-b rv-sec" href="../walkthrough.html"><span>ลำดับเดโม</span></a><a class="rv-b rv-sec" href="../screens.html"><span>สารบัญ</span></a></div><button aria-controls="rv" aria-expanded="false" class="rv-more" type="button"><span>ตัวเลือก</span><svg aria-hidden="true" class="bi bi-chevron-down" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill-rule="evenodd"></path>
+</svg></button><div aria-label="สถานะของหน้านี้" class="rv-st" role="group"><span class="rv-lab">สถานะ</span><a class="rv-c" href="02-1-gate-1440-default.html"><span>ปกติ</span></a><a class="rv-c" href="02-1-gate-1440-loading.html"><span>กำลังโหลด</span></a><a class="rv-c" href="02-1-gate-1440-empty.html"><span>ไม่มีข้อมูล</span></a><a class="rv-c" href="02-1-gate-1440-error.html"><span>ผิดพลาด</span></a><a class="rv-c" href="02-1-gate-1440-lv1.html"><span>ผู้ใช้ LV1</span></a><a aria-current="page" class="rv-c on" href="02-1-gate-1440-alarm.html"><span>ออกโดยไม่ได้รับอนุญาต</span></a><a class="rv-c" href="02-1-gate-1440-unknown.html"><span>ป้ายที่ไม่รู้จัก</span></a><a class="rv-c" href="02-1-gate-1440-offline.html"><span>ขาดสัญญาณ</span></a><a class="rv-c" href="02-1-gate-1440-sim.html"><span>โหมดจำลอง</span></a><a class="rv-c" href="02-1-gate-1440-wait.html"><span>รอเครื่องผ่าน</span></a><a class="rv-c" href="02-1-gate-1440-paused.html"><span>หยุดอัปเดต</span></a><a class="rv-c" href="02-1-gate-1440-fullscreen.html"><span>เต็มจอ</span></a><a class="rv-c" href="02-1-gate-1440-sound-on.html"><span>เปิดเสียงเตือน</span></a><a class="rv-c" href="02-1-gate-1440-alarm-muted.html"><span>ปิดเสียงเตือน</span></a></div><div aria-label="ดูหน้านี้ที่ความกว้างจอ" class="rv-st rv-ws" role="group"><span class="rv-lab">ดูที่จอ</span><a class="rv-c rv-w" href="../preview.html?p=s/02-1-gate-1440-alarm.html&amp;w=390"><span>มือถือ 390</span></a><a class="rv-c rv-w" href="../preview.html?p=s/02-1-gate-1440-alarm.html&amp;w=768"><span>iPad แนวตั้ง 768</span></a><a class="rv-c rv-w" href="../preview.html?p=s/02-1-gate-1440-alarm.html&amp;w=1024"><span>iPad แนวนอน 1024</span></a><a class="rv-c rv-w" href="../preview.html?p=s/02-1-gate-1440-alarm.html&amp;w=1440"><span>เดสก์ท็อป 1440</span></a><a class="rv-c rv-w" href="../preview.html?p=s/02-1-gate-1440-alarm.html&amp;w=1920"><span>จอทีวี 1920</span></a></div></nav><div class="screen kz" id="main" style="--dn:32px" tabindex="-1"><header class="kh"><a aria-label="VALIS หน้าแรก" class="wm" href="exec-dashboard-1440-default.html" translate="no">VALIS</a><span class="ph">สมมติฐาน — รอพี่คง</span><h1>จอแสดงผลประตู UHF</h1><span class="live"><i></i>อัปเดตสด · ทุก 1.5 วินาที</span><span class="clk">09:20</span></header><div class="abar" role="alert"><svg aria-hidden="true" class="bi bi-exclamation-triangle-fill" fill="currentColor" height="32" viewbox="0 0 16 16" width="32" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path>
+</svg><span>เครื่องกระตุกหัวใจ DF-0012 ออกทางประตูหลัง โดยไม่มีรายการยืม</span><span class="sp"></span><a class="btn o" href="02-1-gate-1440-default.html">รับทราบ</a></div><div class="kt"><a class="btn o" href="02-1-gate-1440-paused.html"><svg aria-hidden="true" class="bi bi-pause-fill" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5"></path>
+</svg>หยุดอัปเดต</a><a class="btn o" href="02-1-gate-1440-alarm-muted.html"><svg aria-hidden="true" class="bi bi-volume-up" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"></path>
+<path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"></path>
+<path d="M10.025 8a4.5 4.5 0 0 1-1.318 3.182L8 10.475A3.5 3.5 0 0 0 9.025 8c0-.966-.392-1.841-1.025-2.475l.707-.707A4.5 4.5 0 0 1 10.025 8M7 4a.5.5 0 0 0-.812-.39L3.825 5.5H1.5A.5.5 0 0 0 1 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 7 12zM4.312 6.39 6 5.04v5.92L4.312 9.61A.5.5 0 0 0 4 9.5H2v-3h2a.5.5 0 0 0 .312-.11"></path>
+</svg>ปิดเสียง</a><a class="btn o" href="02-1-gate-1440-fullscreen.html"><svg aria-hidden="true" class="bi bi-arrows-fullscreen" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707" fill-rule="evenodd"></path>
+</svg>เต็มจอ</a><a class="btn o" href="02-1-gate-1440-sim.html"><svg aria-hidden="true" class="bi bi-magic" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707zM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707zm-.621 2.5a.5.5 0 1 0 0-1H4.843a.5.5 0 1 0 0 1zm8.485 0a.5.5 0 1 0 0-1h-1.829a.5.5 0 0 0 0 1zM13.293 10A.5.5 0 1 0 14 9.293L12.707 8a.5.5 0 1 0-.707.707zM9.5 11.157a.5.5 0 0 0 1 0V9.328a.5.5 0 0 0-1 0zm1.854-5.097a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L8.646 5.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0l1.293-1.293Zm-3 3a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L.646 13.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0z"></path>
+</svg>จำลองการผ่านประตู</a><span class="sp"></span><span class="code" style="font-size:16px">โรงพยาบาลตัวอย่าง · <span class="tag t-s">ข้อมูลตัวอย่าง</span></span></div><div class="kb" style="grid-template-rows:auto auto"><div style="display:grid;gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))"><section class="dc"><div class="dch"><svg aria-hidden="true" class="bi bi-door-open" fill="currentColor" height="28" viewbox="0 0 16 16" width="28" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"></path>
+<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"></path>
+</svg><div style="min-width:0"><h2>ประตูหน้า อาคาร 1</h2><div class="loc">ทางเข้าหลัก ชั้น 1</div></div><span class="dir in">ขาเข้า</span></div><div class="dcb"><div class="thumb"><svg aria-hidden="true" class="bi bi-cpu" fill="currentColor" height="40" viewbox="0 0 16 16" width="40" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"></path>
+</svg></div><div style="min-width:0"><div class="dn">เครื่องช่วยหายใจ</div><div class="dcode">VN-0031 · ผ่านเข้า</div><div class="dt">09:19:42 · เมื่อสักครู่</div></div></div><div class="dcf"><span>ผ่านวันนี้ 42 ครั้ง</span></div></section><section class="dc alarm"><div class="dch"><svg aria-hidden="true" class="bi bi-door-open" fill="currentColor" height="28" viewbox="0 0 16 16" width="28" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"></path>
+<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"></path>
+</svg><div style="min-width:0"><h2>ประตูหลัง อาคาร 1</h2><div class="loc">ทางออกขนส่ง ชั้น 1</div></div><span class="dir" style="background:#fff;color:var(--dan)">เตือน</span></div><div class="dcb"><div class="thumb" style="background:var(--dan-bg);color:var(--dan)"><svg aria-hidden="true" class="bi bi-exclamation-triangle-fill" fill="currentColor" height="44" viewbox="0 0 16 16" width="44" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path>
+</svg></div><div style="min-width:0"><div class="dn" style="color:var(--dan)">ออกโดย<span style="white-space:nowrap">ไม่ได้รับอนุญาต</span></div><div class="dcode"><b>เครื่องกระตุกหัวใจ</b> DF-0012 · ไม่มีรายการยืม</div><div class="dt">09:19:58 · เมื่อสักครู่</div></div></div><div class="dcf"><span>ผ่านวันนี้ 17 ครั้ง</span><a class="lnk" href="02-2-door-logs-1440.html">ดูประวัติ</a></div></section><section class="dc"><div class="dch"><svg aria-hidden="true" class="bi bi-arrow-down-up" fill="currentColor" height="28" viewbox="0 0 16 16" width="28" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" fill-rule="evenodd"></path>
+</svg><div style="min-width:0"><h2>ลิฟต์ขนของ อาคาร 2</h2><div class="loc">ชั้น 1 → ชั้น 5</div></div><span class="dir in">ขาเข้า</span></div><div class="dcb"><div class="thumb"><svg aria-hidden="true" class="bi bi-cpu" fill="currentColor" height="40" viewbox="0 0 16 16" width="40" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"></path>
+</svg></div><div style="min-width:0"><div class="dn">เครื่องควบคุมการให้<span style="white-space:nowrap">สารละลาย</span></div><div class="dcode">IP-0144 · ผ่านเข้า</div><div class="dt">09:16:31 · 3 นาทีที่แล้ว</div></div></div><div class="dcf"><span>ผ่านวันนี้ 9 ครั้ง</span></div></section></div><aside class="feed"><div style="display:flex;align-items:center;gap:12px"><h2>ล่าสุด</h2><span class="tag t-s">ข้อมูลตัวอย่าง</span><span class="code">20 พ.ย. 2569</span><a class="lnk" href="02-2-door-logs-1440.html" style="margin-left:auto">ดูประวัติผ่านประตูทั้งหมด</a></div><div class="fgrid"><div class="fe"><span class="tm">09:19</span><div style="min-width:0"><div style="font-weight:600;line-height:1.4">เครื่องกระตุกหัวใจ</div><div class="code">DF-0012 · ประตูหลัง · ออก</div></div><span class="st s-d">ไม่ได้รับอนุญาต</span></div><div class="fe"><span class="tm">09:19</span><div style="min-width:0"><div style="font-weight:600;line-height:1.4">เครื่องช่วยหายใจ</div><div class="code">VN-0031 · ประตูหน้า · เข้า</div></div><span class="st s-o">ผ่าน</span></div><div class="fe"><span class="tm">09:18</span><div style="min-width:0"><div style="font-weight:600;line-height:1.4">เครื่องติดตามสัญญาณชีพ</div><div class="code">PM-0210 · ประตูหลัง · ออก</div></div><span class="st s-p">มีรายการยืม</span></div><div class="fe"><span class="tm">09:16</span><div style="min-width:0"><div style="font-weight:600;line-height:1.4">เครื่องควบคุมการให้สารละลาย</div><div class="code">IP-0144 · ลิฟต์ · เข้า</div></div><span class="st s-o">ผ่าน</span></div></div></aside></div></div></body></html>

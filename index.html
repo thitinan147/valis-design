@@ -1,0 +1,135 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F7F5FA"><title>VALIS ต้นแบบหน้าจอ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#662F90;--p-h:#55267A;--p-soft:#EFE6F8;--ink:#2A1F38;--ink2:#3D3150;--mut:#5E5270;--line:#E3DDEA;--line2:#8A7D9C;--bg:#F7F5FA;--w:#fff;
+--warn:#8A4B00;--warn-bg:#FFF4E0;--dan:#B42318;--dan-bg:#FEECEB;--ok:#1E6B3A;--ok-bg:#E6F4EA;--inf:#1D4F91;--inf-bg:#E8F0FB;--dis-bg:#ECE8F0;--dis:#6E6380}
+body{font-family:'Noto Sans Thai','Noto Sans',sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.6}
+.screen{position:relative;overflow:hidden;background:var(--bg)}
+.top{height:56px;background:var(--w);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px 0 20px;gap:12px;position:relative;z-index:5}
+.wm{font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--p);line-height:1}
+.ph{font-size:12px;color:var(--mut);border:1px dashed var(--line2);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.hosp{font-size:14px;color:var(--ink2);padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.sp{flex:1}
+.date{font-size:13px;color:var(--mut);white-space:nowrap}
+.ib{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.badge{position:absolute;top:6px;right:5px;min-width:18px;height:18px;border-radius:9px;background:var(--dan);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;padding:0 4px}
+.user{display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 4px;border-radius:8px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--p-soft);color:var(--p);display:flex;align-items:center;justify-content:center}
+.un{font-size:13px;font-weight:600;line-height:1.3}.ur{font-size:12px;color:var(--mut);line-height:1.3}
+.lv{font-size:12px;font-weight:700;color:var(--p);background:var(--p-soft);border-radius:4px;padding:0 5px;margin-right:4px}
+.body{display:flex;min-height:calc(100% - 56px)}
+.side{width:288px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:12px}
+.it svg,.ri svg,.btn svg{flex-shrink:0}
+.gh{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--mut);padding:10px 12px 4px;height:32px}
+.gh.tg{height:44px;padding:0 12px;border-radius:8px}
+.it{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:8px;color:var(--ink2);font-size:14px;white-space:nowrap;position:relative}
+.it .ch{margin-left:auto;color:var(--mut);display:flex}
+.it.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.it.hv{background:var(--bg);color:var(--ink)}
+.it.fc{outline:2px solid var(--p);outline-offset:2px}
+.sub{padding-left:44px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--mut);border-radius:8px}
+.sub.on{color:var(--p);font-weight:700;background:var(--p-soft)}
+.cnt{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--dan);border-radius:9px;padding:0 7px;line-height:18px}
+.rail{width:72px;flex:none;background:var(--w);border-right:1px solid var(--line);padding:8px 14px;display:flex;flex-direction:column;align-items:center}
+.ri{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex:none}
+.ri.on{background:var(--p-soft);color:var(--p)}
+.ri.hv{background:var(--bg)}
+.rdiv{width:32px;height:1px;background:var(--line);margin:6px 0;flex:none}
+.tip{position:absolute;left:56px;top:6px;background:var(--ink);color:#fff;font-size:13px;padding:4px 10px;border-radius:6px;white-space:nowrap;z-index:9;line-height:1.6}
+.tip small{display:block;color:#E9DDF7;font-size:12px}
+.main{flex:1;min-width:0;padding:24px 32px 32px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:4px}.crumb b{color:var(--ink2);font-weight:600}
+.hdr{display:flex;align-items:flex-end;gap:16px;margin-bottom:16px}
+h1{font-size:24px;line-height:1.4;font-weight:700}
+.lead{font-size:14px;color:var(--mut)}
+.acts{margin-left:auto;display:flex;gap:8px;flex:none}
+.btn{height:44px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:inherit;border:1px solid transparent;flex:none}
+.btn.pr{background:var(--p);color:#fff;border-color:var(--p)} .btn.pr.hv{background:var(--p-h);border-color:var(--p-h)}
+.btn.o{border-color:var(--line2);background:var(--w);color:var(--ink2)}
+.btn.gh2{background:transparent;color:var(--p)}
+.btn.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.btn.fc{outline:2px solid var(--p);outline-offset:2px}
+.btn.dan{background:var(--w);color:var(--dan);border-color:var(--dan)}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff}
+.spin.d{border-color:#CFC6DA;border-top-color:var(--p)}
+.note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);background:var(--w);border:1px solid #D9CCE8;border-radius:6px;padding:6px 12px;margin-bottom:16px}
+.note.w{background:var(--warn-bg);border-color:#F0D9B5}
+.note.e{background:var(--dan-bg);border-color:#F5C9C5}
+.tag{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;white-space:nowrap;line-height:20px;display:inline-block}
+.t-s{color:var(--warn);background:var(--warn-bg)} .t-sim{color:var(--mut);background:#EEEAF2} .t-est{color:var(--p);background:var(--p-soft)} .t-pil{color:var(--inf);background:var(--inf-bg)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);background:var(--w);border:1px solid var(--line);border-radius:8px;margin-bottom:16px}
+.k{padding:12px 20px;border-left:1px solid var(--line)} .k:first-child{border-left:0}
+.kl{font-size:13px;color:var(--mut)} .kv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+.kv small{font-size:13px;font-weight:500;color:var(--mut);margin-left:4px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pan{background:var(--w);border:1px solid var(--line);border-radius:8px;padding:16px 20px;min-width:0}
+.pt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pt h2{font-size:16px;font-weight:700;margin-right:4px}
+.pt .r{margin-left:auto}
+.fig{display:flex;gap:28px;margin:4px 0 8px;flex-wrap:wrap}
+.fl{font-size:13px;color:var(--mut)} .fv{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.4}
+.fv.d{color:var(--ok)}
+.def{font-size:12px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px;margin-top:4px;display:flex;gap:16px;align-items:center}
+.lnk{display:inline-flex;align-items:center;min-height:44px;color:var(--p);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;font-size:14px}
+.def .lnk{margin-left:auto}
+.lg{display:flex;gap:16px;font-size:12px;color:var(--ink2);flex-wrap:wrap}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row .n{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.st{font-size:12px;font-weight:600;border-radius:4px;padding:0 6px;line-height:20px;white-space:nowrap}
+.s-d{color:var(--dan);background:var(--dan-bg)} .s-w{color:var(--warn);background:var(--warn-bg)} .s-o{color:var(--ok);background:var(--ok-bg)} .s-n{color:var(--mut);background:#EEEAF2} .s-p{color:var(--p);background:var(--p-soft)}
+.sec{font-size:16px;font-weight:700;margin:24px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:13px;color:var(--mut);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:600}
+.inp{height:44px;min-width:160px;border:1px solid var(--line2);border-radius:8px;background:var(--w);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--ink)}
+.inp .ch{margin-left:auto;color:var(--mut);display:flex}
+.inp.ph2{color:var(--mut)}
+.inp.fc{border-color:var(--p);outline:2px solid var(--p);outline-offset:2px}
+.inp.er{border-color:var(--dan);border-width:2px}
+.inp.dis{background:var(--dis-bg);color:var(--dis);border-color:var(--dis-bg)}
+.hint{font-size:12px;color:var(--mut);font-weight:400}.err{font-size:12px;color:var(--dan);font-weight:600;display:flex;gap:4px;align-items:center}
+.seg{display:inline-flex;align-self:flex-start;width:max-content;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg span{height:44px;padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink2);border-left:1px solid var(--line2)}
+.seg span:first-child{border-left:0}.seg span.on{background:var(--p-soft);color:var(--p);font-weight:700}
+.sk{background:linear-gradient(90deg,#ECE8F0,#F4F1F7);border-radius:6px}
+.blk{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:40px 24px}
+.blk .ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p-soft);color:var(--p)}
+.blk.e .ic{background:var(--dan-bg);color:var(--dan)}
+.blk h3{font-size:16px;font-weight:700}.blk p{font-size:14px;color:var(--mut);max-width:440px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:8px;padding:10px 12px 10px 16px;font-size:14px;box-shadow:0 8px 24px rgba(42,31,56,.22)}
+.toast .lnk{color:#E9DDF7}
+.toast.fx{position:absolute;right:24px;bottom:24px;z-index:9}
+.drawerR{position:absolute;top:56px;right:0;bottom:0;width:440px;background:var(--w);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(42,31,56,.12);z-index:6;padding:20px 24px;overflow:hidden}
+.bar{height:8px;border-radius:4px;background:#ECE8F0;overflow:hidden}.bar i{display:block;height:100%;background:var(--p)}
+</style><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/site.css"><script src="assets/site.js" defer></script></head><body class="hub">
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a><header class="hub-top"><div class="hub-in"><span class="wm" translate="no">VALIS</span><span class="ph">สมมติฐาน — รอพี่คง</span><nav aria-label="หน้าหลักของต้นแบบ"><a href="index.html" aria-current=page>หน้าแรก</a><a href="walkthrough.html">ลำดับเดโม</a><a href="screens.html">สารบัญทุกหน้า</a></nav></div></header><main id="main" tabindex="-1">
+<section class="hub-in hub-hero"><div>
+<h1>ต้นแบบหน้าจอ VALIS เปิดดูได้ทุกหน้า</h1>
+<p class="lead">ระบบบริหารเครื่องมือแพทย์สำหรับโรงพยาบาล ใช้ดูแบบก่อนพัฒนา เมนู ปุ่มหลัก และแถวในตารางพาไปหน้าที่เกี่ยวข้องได้จริง</p>
+<div class="hub-acts"><a class="btn pr hub-cta" href="s/login-1440-default.html">เริ่มที่หน้าเข้าสู่ระบบ</a><a class="btn o hub-cta" href="walkthrough.html">ดูตามลำดับเดโม</a></div>
+<p class="hub-fine">ทุกหน้ามีแถบสีเข้มด้านบนไว้สลับสถานะ เช่น กำลังโหลด ไม่มีข้อมูล หรือผิดพลาด และสลับความกว้างจอ 390 768 1024 1440 แถบนี้ใช้ดูแบบเท่านั้น ไม่ใช่ส่วนของระบบ</p>
+</div><a class="hub-shot" href="s/exec-dashboard-1440-default.html" aria-label="เปิดแดชบอร์ดผู้บริหาร"><img src="assets/thumbs/exec-dashboard-1440-default.png" width="1280" height="800" alt="ภาพหน้าแดชบอร์ดผู้บริหาร มีกราฟต้นทุนซ่อมก่อนและหลังใช้ระบบ" fetchpriority="high"></a></section>
+<section class="hub-sec hub-in" aria-labelledby="h-route"><h2 id="h-route">ลำดับเดโม 24 หน้า</h2><p class="lead">เดินตามเส้นนี้ตอนนำเสนอ จากเข้าสู่ระบบ ไปจนถึงหน้าที่ปรับหน้าตา</p>
+<ol class="route"><li><h3>เข้าสู่ระบบและโครงแอป</h3><ol><li><a href="s/login-1440-default.html"><b>1</b><span>เข้าสู่ระบบ</span></a></li><li><a href="s/shell-1440-normal.html"><b>2</b><span>โครงแอปและเมนู</span></a></li><li><a href="preview.html?p=s/shell-1440-normal.html&w=1024&t=3"><b>3</b><span>เมนูไอคอน จอ 1024</span></a></li></ol></li><li><h3>แดชบอร์ดผู้บริหารและต้นทุน</h3><ol><li><a href="s/exec-dashboard-1440-default.html"><b>4</b><span>แดชบอร์ดผู้บริหาร + ต้นทุน</span></a></li><li><a href="s/exec-dashboard-1440-lv1-no-cost-section.html"><b>5</b><span>แดชบอร์ดของผู้ใช้ LV1</span></a></li><li><a href="s/replacement-1440-default.html"><b>6</b><span>เครื่องที่ควรทดแทน</span></a></li></ol></li><li><h3>สอบเทียบ PM และ HA</h3><ol><li><a href="s/ipm-dashboard-1440-default.html"><b>7</b><span>แดชบอร์ด IPM</span></a></li><li><a href="s/ipm-calendar-1440-default.html"><b>8</b><span>ปฏิทินสอบเทียบ / PM</span></a></li><li><a href="s/ha-pack-1440-default.html"><b>9</b><span>ชุดหลักฐาน HA</span></a></li></ol></li><li><h3>พลังงานและ ESG</h3><ol><li><a href="s/energy-1440-default.html"><b>10</b><span>แดชบอร์ดพลังงาน</span></a></li><li><a href="s/esg-export-1440-default.html"><b>11</b><span>รายงาน ESG</span></a></li></ol></li><li><h3>อุณหภูมิตู้เย็น</h3><ol><li><a href="s/10-1-overview-1440-default.html"><b>12</b><span>ตู้เย็นนอกช่วง</span></a></li><li><a href="s/10-4-ack-dialog-1440.html"><b>13</b><span>รับทราบการเตือน</span></a></li><li><a href="s/10-1-overview-1440-ack.html"><b>14</b><span>หลังรับทราบ</span></a></li><li><a href="s/10-2-detail-1440-default.html"><b>15</b><span>กราฟอุณหภูมิ 24 ชม.</span></a></li></ol></li><li><h3>ประตู แผนผัง ทะเบียน</h3><ol><li><a href="s/02-1-gate-1440-default.html"><b>16</b><span>จอประตู UHF</span></a></li><li><a href="s/02-1-gate-1440-alarm.html"><b>17</b><span>ออกโดยไม่ได้รับอนุญาต</span></a></li><li><a href="s/01-1-map-1440-default.html"><b>18</b><span>แผนผังตำแหน่ง</span></a></li><li><a href="s/04-1-registry-1440-default.html"><b>19</b><span>ทะเบียนครุภัณฑ์</span></a></li></ol></li><li><h3>หน้าที่ปรับหน้าตา</h3><ol><li><a href="s/03-3-scan-borrow-1440.html"><b>20</b><span>สแกนยืมเครื่อง</span></a></li><li><a href="s/04-2-device-detail-1440.html"><b>21</b><span>รายละเอียดครุภัณฑ์</span></a></li><li><a href="preview.html?p=s/04-5-public-qr-1440.html&w=390&t=22"><b>22</b><span>สแกน QR บนมือถือ</span></a></li><li><a href="s/05-6-service-timeline-1440.html"><b>23</b><span>ไทม์ไลน์งานซ่อม</span></a></li><li><a href="s/C-04-export-header-1440.html"><b>24</b><span>หัวเอกสาร PDF</span></a></li></ol></li></ol></section>
+<section class="hub-sec hub-in" aria-labelledby="h-mod"><h2 id="h-mod">ทุกโมดูล</h2><p class="lead">64 หน้า: ออกแบบใหม่หรือหน้าใหม่ 17 หน้า ปรับหน้าตา 15 หน้า และวาดใหม่ตามโครงหน้าเดิมของ V2 อีก 32 หน้า ทุกหน้าปรับตามความกว้างจอได้</p>
+<table class="mods"><thead><tr><th scope="col">โมดูล</th><th scope="col" class="num">ทั้งหมด</th><th scope="col" class="num">ออกแบบใหม่</th><th scope="col" class="num">ปรับหน้าตา</th><th scope="col" class="num">ตามโครง V2</th><th scope="col">เปิด</th></tr></thead><tbody><tr><td><b>C</b> ชื่อ/แบรนด์ VALIS และโครงแอป</td><td class="num">6</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td><a class="go" href="screens.html#m-C">ดูหน้าในโมดูล</a></td></tr><tr><td><b>01</b> ติดตามตำแหน่งเรียลไทม์ (Beacon)</td><td class="num">7</td><td class="num">0</td><td class="num">1</td><td class="num">6</td><td><a class="go" href="screens.html#m-01">ดูหน้าในโมดูล</a></td></tr><tr><td><b>02</b> ป้องกันการสูญหาย (ประตู UHF)</td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td><a class="go" href="screens.html#m-02">ดูหน้าในโมดูล</a></td></tr><tr><td><b>03</b> ยืม-คืนด้วยบาร์โค้ด</td><td class="num">6</td><td class="num">0</td><td class="num">3</td><td class="num">3</td><td><a class="go" href="screens.html#m-03">ดูหน้าในโมดูล</a></td></tr><tr><td><b>04</b> ทะเบียนครุภัณฑ์ดิจิทัล + QR</td><td class="num">6</td><td class="num">1</td><td class="num">3</td><td class="num">2</td><td><a class="go" href="screens.html#m-04">ดูหน้าในโมดูล</a></td></tr><tr><td><b>05</b> แจ้งซ่อมออนไลน์</td><td class="num">6</td><td class="num">0</td><td class="num">1</td><td class="num">5</td><td><a class="go" href="screens.html#m-05">ดูหน้าในโมดูล</a></td></tr><tr><td><b>06</b> สอบเทียบ / PM (IPM) + รายงาน HA</td><td class="num">7</td><td class="num">3</td><td class="num">1</td><td class="num">3</td><td><a class="go" href="screens.html#m-06">ดูหน้าในโมดูล</a></td></tr><tr><td><b>07</b> คลังพัสดุและอะไหล่</td><td class="num">3</td><td class="num">0</td><td class="num">0</td><td class="num">3</td><td><a class="go" href="screens.html#m-07">ดูหน้าในโมดูล</a></td></tr><tr><td><b>08</b> พลังงาน / ESG</td><td class="num">3</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td><a class="go" href="screens.html#m-08">ดูหน้าในโมดูล</a></td></tr><tr><td><b>09</b> แดชบอร์ดผู้บริหาร + สิทธิ์ตามบทบาท</td><td class="num">8</td><td class="num">2</td><td class="num">2</td><td class="num">4</td><td><a class="go" href="screens.html#m-09">ดูหน้าในโมดูล</a></td></tr><tr><td><b>10</b> อุณหภูมิตู้เย็น วัคซีน ยา เลือด</td><td class="num">6</td><td class="num">6</td><td class="num">0</td><td class="num">0</td><td><a class="go" href="screens.html#m-10">ดูหน้าในโมดูล</a></td></tr><tr><td><b>X</b> อื่นๆ</td><td class="num">3</td><td class="num">0</td><td class="num">0</td><td class="num">3</td><td><a class="go" href="screens.html#m-X">ดูหน้าในโมดูล</a></td></tr></tbody></table></section>
+<section class="hub-sec hub-in" aria-labelledby="h-ref"><h2 id="h-ref">ระบบออกแบบ</h2><p class="lead">สี ตัวอักษร สถานะมาตรฐาน และเมนูตามสิทธิ์ ที่ทุกหน้าใช้ร่วมกัน</p>
+<div class="refs"><a href="s/tokens.html"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" aria-hidden="true" class="bi bi-palette" viewBox="0 0 16 16">
+  <path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+  <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8m-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7"/>
+</svg>สี ตัวอักษร ระยะห่าง</a><a href="s/states-sheet.html"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" aria-hidden="true" class="bi bi-ui-checks" viewBox="0 0 16 16">
+  <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+</svg>สถานะมาตรฐาน</a><a href="s/menu-by-role.html"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" aria-hidden="true" class="bi bi-people" viewBox="0 0 16 16">
+  <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+</svg>เมนูตามระดับสิทธิ์</a><a href="assets/system-overview.png"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" aria-hidden="true" class="bi bi-grid-3x3-gap" viewBox="0 0 16 16">
+  <path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1M9 2v2H7V2zm5 0v2h-2V2zM4 7v2H2V7zm5 0v2H7V7zm5 0h-2v2h2zM4 12v2H2v-2zm5 0v2H7v-2zm5 0v2h-2v-2zM12 1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm-1 6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm1 4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/>
+</svg>ภาพรวมทั้งระบบ (PNG)</a></div></section>
+</main><footer class="hub-foot"><div class="hub-in">ตัวเลขและชื่อทุกตัวในต้นแบบนี้เป็นข้อมูลตัวอย่างหรือข้อมูลจำลอง ไม่ใช่ข้อมูลโรงพยาบาลจริง · สีม่วง #662F90 เป็นสีชั่วคราว — รอแบรนด์ · อัปเดต 20 พ.ย. 2569</div></footer></body></html>
